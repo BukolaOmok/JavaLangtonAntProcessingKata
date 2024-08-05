@@ -6,6 +6,7 @@ public class Ant {
     private GridPosition gridPosition;
     private Direction direction;
     private final Ground ground;  //ref won't change once ant is created
+    private Cell cell;
 
     //named "p5" for brevity and familiarity, even though it's not actually p5 but a "Processing Applet" instance.
     private final PApplet p5;
@@ -18,6 +19,7 @@ public class Ant {
         this.direction = Direction.random();
         this.ground = ground;
         this.gridPosition = new GridPosition(startPos.x(), startPos.y());
+        this.cell = ground.cellAt(gridPosition);
         this.myColour = p5.color(255, 0, 255);
     }
 
@@ -41,6 +43,13 @@ public class Ant {
         // At a white square, turn 90° right, flip the color of the square, move forward one unit
         // At a black square, turn 90° left, flip the color of the square, move forward one unit
 
+        Cell currentCell = ground.cellAt(gridPosition);
+        if (cell.stateColor() == "white") {
+            turnClockwise();
+        } else if (cell.stateColor() == "black") {
+            turnCounterclockwise();
+        }
+        currentCell.toggleActive();
         moveForward();
 
         //Notes: In the ground object, "white" squares are "inactive", "black" squares are "active"
